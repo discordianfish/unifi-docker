@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euo pipefail
+
+cat <<EOF > /data/data/system.properties
+db.mongo.local=false
+db.mongo.uri=mongodb://${MONGO_USER:-unifi}:${MONGO_PASSWORD:-}@${MONGO_ADDRESS:-}/${MONGO_DB:-unifi}
+statdb.mongo.uri=mongodb://${MONGO_USER:-unifi}:${MONGO_PASSWORD:-}@${MONGO_ADDRESS:-}/${MONGO_STATS_DB:-unifi-stats}
+unifi.db.name=${MONGO_DB:-unifi}
+EOF
+
+exec /usr/bin/java \
+  -cp /usr/share/java/commons-daemon.jar:/usr/lib/unifi/lib/ace.jar \
+  -Dunifi.datadir=/data/data \
+  -Dunifi.rundir=/var/run/unifi \
+  -Djava.awt.headless=true \
+  -Dfile.encoding=UTF-8 \
+  "$@"

@@ -2,7 +2,7 @@ FROM debian:stretch-slim
 
 ENV VERSION=5.10.19-11646-1
 
-ENV BDEPS apt-transport-https gnupg ca-certificates
+ENV BDEPS apt-transport-https gnupg
 RUN mkdir /usr/share/man/man1 && \
   useradd --uid 1000 -s /bin/false -d /var/lib/unifi unifi && \
   apt-get -qy update && apt-get -qy install $BDEPS && \
@@ -12,8 +12,8 @@ RUN mkdir /usr/share/man/man1 && \
   apt-get -qy update && \
   apt-get -qy install unifi=$VERSION && \
   apt-get -qy remove $BDEPS && \
-  apt-get -qy clean && \
   apt-get -qy autoremove && \
+  apt-get -qy clean && \
   rm -rf /var/lib/apt/lists/*
 
 # Somehow setting -Dunifi.datadir=/data/data alone doesn't work.
